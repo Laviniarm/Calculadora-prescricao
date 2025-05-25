@@ -8,14 +8,14 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Data
 public class PrescricaoRequestDTO {
     @NotBlank private String nomeAcusado;
     @NotBlank private String numeroProcesso;
     @NotNull private LocalDate dataNascimento;
-    @NotBlank
+
+    @NotNull(message = "tipoPrescricao não pode ser nulo")
     private TipoPrescricao tipoPrescricao;
 
     @Min(0) private int penaAnos;

@@ -19,5 +19,4 @@ public class PrescricaoController {
     public ResponseEntity<PrescricaoResponseDTO> calcular(@RequestBody @Valid PrescricaoRequestDTO dto) {
         return ResponseEntity.ok(service.calcularPrescricao(dto));
     }
-
 }
