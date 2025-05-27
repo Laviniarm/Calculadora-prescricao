@@ -27,7 +27,7 @@ public class PrescricaoServiceTest {
     @Test
     public void deveCalcularPrescricaoParaMaior70Anos() {
         PrescricaoRequestDTO dto = new PrescricaoRequestDTO();
-        dto.setTipoPrescricao(TipoPrescricao.ABSTRATO);
+        dto.setTipoPrescricao(TipoPrescricao.ABSTRATA);
         dto.setPenaAnos(12);
         dto.setPenaMeses(0);
         dto.setPenaDias(0);
