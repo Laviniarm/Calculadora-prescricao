@@ -21,8 +21,9 @@ public class PrescricaoService {
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public PrescricaoResponseDTO calcularPrescricao(PrescricaoRequestDTO dto) {
+
         int penaMeses = dto.getPenaAnos() * 12 + dto.getPenaMeses();
-        if (dto.getPenaDias() >= 15) penaMeses++; // arredondamento
+        if (dto.getPenaDias() >= 30) penaMeses++;
 
         int prazo = calcularPrazoPrescricao(penaMeses);
 
