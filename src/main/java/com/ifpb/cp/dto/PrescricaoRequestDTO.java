@@ -23,8 +23,17 @@ public class PrescricaoRequestDTO {
     @Min(0) private int penaDias;
 
     @NotNull private LocalDate dataFato;
-    @NotNull
+    private LocalDate dataTransitoEmJulgado;
+
+    // Causas de interrupção do prazo prescricional
     private LocalDate dataRecebimentoDaDenuncia;
+    private LocalDate dataPronuncia;
+    private LocalDate dataConfirmatoriaDaPronuncia;
+    private LocalDate dataPublicacaoDaSentencaOuAcordao;
+    private LocalDate dataInicioDoCumprimentoDaPena;
+    private LocalDate dataContinuacaoDoCumprimentoDaPena;
+    private LocalDate dataReincidencia;
+
 
     private boolean crimeTentado;
     private boolean causasAumento;
@@ -41,4 +50,8 @@ public class PrescricaoRequestDTO {
     private String elaboradoPor;
 
     private List<SuspensaoDTO> suspensoes;
+
+    public TipoPrescricao getTipoPrescricao() {
+        return this.tipoPrescricao;
+    }
 }
