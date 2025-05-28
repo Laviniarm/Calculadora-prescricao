@@ -19,7 +19,9 @@ public class PrescricaoService {
 
     public PrescricaoResponseDTO calcularPrescricao(PrescricaoRequestDTO dto) {
         PrescricaoCalculator calculator;
-
+        if (dto.getTipoPrescricao() == null) {
+            throw new IllegalArgumentException("O tipo de prescriçao não pode ser nulo");
+        }
         switch (dto.getTipoPrescricao()) {
             case ABSTRATA:
                 calculator = abstrataCalculator;

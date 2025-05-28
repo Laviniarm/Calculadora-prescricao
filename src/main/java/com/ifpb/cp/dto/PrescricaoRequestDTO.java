@@ -4,12 +4,15 @@ import com.ifpb.cp.enums.TipoPrescricao;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PrescricaoRequestDTO {
     @NotBlank private String nomeAcusado;
     @NotBlank private String numeroProcesso;
@@ -18,9 +21,9 @@ public class PrescricaoRequestDTO {
     @NotNull(message = "tipoPrescricao não pode ser nulo")
     private TipoPrescricao tipoPrescricao;
 
-    @Min(0) private int penaAnos;
-    @Min(0) private int penaMeses;
-    @Min(0) private int penaDias;
+    @Min(0) private Integer penaAnos;
+    @Min(0) private Integer penaMeses;
+    @Min(0) private Integer penaDias;
 
     @NotNull private LocalDate dataFato;
     private LocalDate dataTransitoEmJulgado;

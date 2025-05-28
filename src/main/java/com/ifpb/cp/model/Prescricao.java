@@ -23,9 +23,9 @@ public class Prescricao {
     @Enumerated(EnumType.STRING)
     private TipoPrescricao tipoPrescricao;
 
-    private int penaAnos;
-    private int penaMeses;
-    private int penaDias;
+    private Integer penaAnos;
+    private Integer penaMeses;
+    private Integer penaDias;
 
     private LocalDate dataFato;
     private LocalDate dataRecebimentoDaDenuncia;

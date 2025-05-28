@@ -9,13 +9,16 @@ import com.ifpb.cp.service.calculo.impl.AbstrataPrescricaoCalculator;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AbstrataPrescricaoCalculatorTest {
 
     private final AbstrataPrescricaoCalculator calculator = new AbstrataPrescricaoCalculator();
+    private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Test
     public void calculaPrescricaoSemInterrupcaoOuSuspensao() {
@@ -84,4 +87,56 @@ public class AbstrataPrescricaoCalculatorTest {
         assertEquals("4 anos", resp.getPrazoPrescricional());
         assertEquals("01/07/2004", resp.getDataProvavel());
     }
+
+    @Test
+    void calculaPrescricaoParaMenorDe21Anos() {
+        PrescricaoRequestDTO dto = new PrescricaoRequestDTO();
+        dto.setTipoPrescricao(TipoPrescricao.ABSTRATA);
+        dto.setDataNascimento(LocalDate.of(2006, 6, 15));
+        dto.setDataFato(LocalDate.of(2018, 6, 16));
+        dto.setPenaAnos(4);
+        dto.setPenaMeses(0);
+        dto.setPenaDias(0);
+        dto.setSuspensoes(List.of());
+
+        PrescricaoResponseDTO resp = calculator.calcular(dto);
+
+        assertEquals("4 anos, 0 meses e 0 dias", resp.getPena());
+        assertEquals("Menor de 21 anos", resp.getFaixaEtaria());
+        assertEquals("4 anos", resp.getPrazoPrescricional()); // 8 anos reduzido para 4
+        assertEquals("15/06/2022", resp.getDataProvavel()); // 16/06/2018 + 4 anos
+    }
+
+    @Test
+    void calculaPrescricaoParaMaiorDe70Anos() {
+        PrescricaoRequestDTO dto = new PrescricaoRequestDTO();
+        dto.setTipoPrescricao(TipoPrescricao.ABSTRATA);
+        dto.setDataNascimento(LocalDate.of(1940, 1, 1)); // 80 anos no fato
+        dto.setDataFato(LocalDate.of(2020, 1, 1));
+        dto.setPenaAnos(5);
+        dto.setPenaMeses(0);
+        dto.setPenaDias(0);
+        dto.setSuspensoes(List.of());
+
+        PrescricaoResponseDTO resp = calculator.calcular(dto);
+
+        assertEquals("5 anos, 0 meses e 0 dias", resp.getPena());
+        assertEquals("Maior de 70 anos", resp.getFaixaEtaria());
+        assertEquals("6 anos", resp.getPrazoPrescricional());
+        assertEquals("30/12/2025", resp.getDataProvavel());
+    }
+
+    @Test
+    void deveLancarErroQuandoDataFatoNull() {
+        PrescricaoRequestDTO dto = new PrescricaoRequestDTO();
+        dto.setTipoPrescricao(TipoPrescricao.ABSTRATA);
+        dto.setDataFato(null);
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.calcular(dto)
+        );
+        assertEquals("Data inicial não pode ser null", ex.getMessage());
+    }
+
 }
