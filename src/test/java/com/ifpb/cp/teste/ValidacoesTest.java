@@ -2,6 +2,7 @@ package com.ifpb.cp.teste;
 
 import com.ifpb.cp.dto.PrescricaoRequestDTO;
 import com.ifpb.cp.enums.TipoPrescricao;
+import com.ifpb.cp.service.PrescricaoService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -56,7 +57,6 @@ public class ValidacoesTest {
         assertTrue(mensagens.contains("must not be blank") || mensagens.contains("não deve estar em branco"));
     }
 
-    //teste não passou
     @Test
     void naoDeveAceitarPenasNegativas() {
         PrescricaoRequestDTO dto = criarValido();
@@ -65,10 +65,20 @@ public class ValidacoesTest {
         dto.setPenaDias(-3);
 
         Set<ConstraintViolation<PrescricaoRequestDTO>> violations = validator.validate(dto);
+
         assertEquals(3, violations.size());
 
+        List<String> camposInvalidos = violations.stream()
+                .map(ConstraintViolation::getPropertyPath)
+                .map(Object::toString)
+                .toList();
+
+        assertTrue(camposInvalidos.contains("penaAnos"));
+        assertTrue(camposInvalidos.contains("penaMeses"));
+        assertTrue(camposInvalidos.contains("penaDias"));
+
         for (ConstraintViolation<PrescricaoRequestDTO> v : violations) {
-            assertTrue(v.getMessage().contains("deve ser maior ou igual a 0"));
+            assertEquals("deve ser maior que ou igual à 0", v.getMessage());
         }
     }
 
@@ -81,5 +91,19 @@ public class ValidacoesTest {
 
         Set<ConstraintViolation<PrescricaoRequestDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty(), "Campos opcionais nulos não devem causar erro");
+    }
+
+    @Test
+    void deveLancarExcecaoParaTipoPrescricaoInvalido() {
+        PrescricaoService service = new PrescricaoService();
+
+        PrescricaoRequestDTO dto = criarValido();
+        dto.setTipoPrescricao(null); // tipo inválido
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            service.calcularPrescricao(dto);
+        });
+
+        assertEquals("O tipo de prescriçao não pode ser nulo", exception.getMessage());
     }
 }
