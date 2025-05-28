@@ -44,17 +44,17 @@ public class PrescricaoRequestDTO {
     private boolean processoSuspenso;
 
     private boolean tribunalJuri;
-    private LocalDate dataSentencaPronuncia;
-    private LocalDate dataAcordaoPronuncia;
-    private LocalDate dataSentencaCondenatoria;
-    private LocalDate dataAcordaoCondenatorio;
+    // private LocalDate dataSentencaPronuncia;
+    // private LocalDate dataAcordaoPronuncia;
+    // private LocalDate dataSentencaCondenatoria;
+    // private LocalDate dataAcordaoCondenatorio;
 
     private String observacao;
     private String elaboradoPor;
 
     private List<SuspensaoDTO> suspensoes;
 
-    public TipoPrescricao getTipoPrescricao() {
-        return this.tipoPrescricao;
-    }
+//    public TipoPrescricao getTipoPrescricao() {
+//        return this.tipoPrescricao;
+//    }
 }
