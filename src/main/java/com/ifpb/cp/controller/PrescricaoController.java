@@ -3,6 +3,7 @@ package com.ifpb.cp.controller;
 import com.ifpb.cp.dto.PrescricaoRequestDTO;
 import com.ifpb.cp.dto.PrescricaoResponseDTO;
 import com.ifpb.cp.enums.TipoPrescricao;
+import com.ifpb.cp.model.Prescricao;
 import com.ifpb.cp.service.PrescricaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,12 @@ public class PrescricaoController {
 
         TipoPrescricao tipo = dto.getTipoPrescricao();
         PrescricaoResponseDTO resp = service.calcularPrescricao(dto);
+        return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/salvar")
+    public ResponseEntity<Prescricao> salvar(@RequestBody @Valid PrescricaoRequestDTO dto){
+        Prescricao resp = service.salvarPrescricao(dto);
         return ResponseEntity.ok(resp);
     }
 }
