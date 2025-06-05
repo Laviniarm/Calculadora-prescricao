@@ -49,5 +49,14 @@ public class Prescricao {
     private String observacao;
     private String elaboradoPor;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
+    private String pena;
+    private String faixaEtaria;
+    private String prazoPrescricional;
+    private String dataProvavel;
+
     //private List<SuspensaoDTO> suspensoes;
 }
