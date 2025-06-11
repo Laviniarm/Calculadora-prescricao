@@ -1,6 +1,7 @@
 package com.ifpb.cp.service;
 
 import com.ifpb.cp.dto.PrescricaoRequestDTO;
+import com.ifpb.cp.dto.PrescricaoSaveDTO;
 import com.ifpb.cp.dto.PrescricaoResponseDTO;
 import com.ifpb.cp.model.Prescricao;
 import com.ifpb.cp.model.Usuario;
@@ -8,10 +9,13 @@ import com.ifpb.cp.repository.PrescricaoRepository;
 import com.ifpb.cp.repository.UsuarioRepository;
 import com.ifpb.cp.service.calculo.PrescricaoCalculator;
 import com.ifpb.cp.service.calculo.impl.AbstrataPrescricaoCalculator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +30,6 @@ public class PrescricaoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private static final String EMAIL_PADRAO = "usuario@ficticio.com";
 
     // Se houver outras modalidades, injete-as aqui…
 
@@ -49,13 +52,12 @@ public class PrescricaoService {
         return calculator.calcular(dto);
     }
 
-    public Prescricao salvarPrescricao(@Valid PrescricaoRequestDTO dto) {
+    public Prescricao salvarPrescricao(@Valid PrescricaoSaveDTO dto) {
         // 1) Executa o cálculo, que retorna apenas os valores de saída
         PrescricaoResponseDTO resultado = calcularPrescricao(dto);
 
         // 2) Busca o usuário fictício (tempo sendo)
-        Usuario usuario = usuarioRepository.findByEmail(EMAIL_PADRAO)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId()).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
 
         // 3) Mapeia DTO de entrada, DTO de saída e usuário para a entidade
         Prescricao entidade = new Prescricao();
@@ -86,5 +88,10 @@ public class PrescricaoService {
         repository.save(entidade);
 
         return entidade;
+    }
+
+    public List<Prescricao> listarPrescricoes(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
+        return repository.listarPrescricaoPorUsuario(usuario.getId());
     }
 }

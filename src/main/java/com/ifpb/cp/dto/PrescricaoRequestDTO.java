@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrescricaoRequestDTO {
+
     @NotBlank private String nomeAcusado;
     @NotBlank private String numeroProcesso;
     @NotNull private LocalDate dataNascimento;
