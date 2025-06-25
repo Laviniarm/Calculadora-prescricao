@@ -2,5 +2,7 @@ package com.ifpb.cp.enums;
 
 public enum TipoPrescricao {
     ABSTRATA,
-    CONCRETO
+    CONCRETO,
+    RETROATIVA,
+    INTERCORRENTE
 }

@@ -9,6 +9,9 @@ import com.ifpb.cp.repository.PrescricaoRepository;
 import com.ifpb.cp.repository.UsuarioRepository;
 import com.ifpb.cp.service.calculo.PrescricaoCalculator;
 import com.ifpb.cp.service.calculo.impl.AbstrataPrescricaoCalculator;
+import com.ifpb.cp.service.calculo.impl.ConcretaRetroativaPrescricaoCalculator;
+import com.ifpb.cp.service.calculo.impl.ExecutoriaPrescricaoCalculator;
+import com.ifpb.cp.service.calculo.impl.IntercorrentePrescricaoCalculator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,15 @@ public class PrescricaoService {
 
     @Autowired
     private AbstrataPrescricaoCalculator abstrataCalculator;
+
+    @Autowired
+    private ExecutoriaPrescricaoCalculator concretoCalculator;
+
+    @Autowired
+    private ConcretaRetroativaPrescricaoCalculator retroativaCalculator;
+
+    @Autowired
+    private IntercorrentePrescricaoCalculator intercorrenteCalculator;
 
     @Autowired
     private PrescricaoRepository repository;
@@ -41,6 +53,15 @@ public class PrescricaoService {
         switch (dto.getTipoPrescricao()) {
             case ABSTRATA:
                 calculator = abstrataCalculator;
+                break;
+            case CONCRETO:
+                calculator = concretoCalculator;
+                break;
+            case RETROATIVA:
+                calculator = retroativaCalculator;
+                break;
+            case INTERCORRENTE:
+                calculator = intercorrenteCalculator;
                 break;
 
             default:

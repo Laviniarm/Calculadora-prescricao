@@ -98,7 +98,7 @@ public abstract class AbstractPrescricaoCalculator implements PrescricaoCalculat
     );
 
     /** Wrapper para retorno múltiplo do hook */
-    protected static class CustomResult {
+    public static class CustomResult {
         private final long prazoDiasAjustado;
         private final LocalDate dataLimiteInicial;
         private final long diasSuspensaoLimitado;
